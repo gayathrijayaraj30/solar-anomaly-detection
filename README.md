@@ -1,138 +1,126 @@
-# Solar Production Anomaly Dashboard
-
-A comprehensive Python-based solution for detecting and explaining anomalies in solar power production using advanced machine learning and explainability techniques. This project integrates data preprocessing, weather data fetching, XGBoost forecasting, anomaly detection, and SHAP-based interpretability into a cohesive pipeline, alongside an interactive dashboard for visual exploration.
+# Solar Anomaly Detection
 
 ---
 
 ## Project Overview
 
-Solar energy production is inherently variable and subject to external factors such as weather changes and equipment issues. This project addresses the critical need to monitor and detect anomalies in solar production data, enabling timely intervention and improved forecasting accuracy.
+This project implements an end-to-end pipeline for detecting anomalies in solar power generation using machine learning techniques. It combines inverter telemetry data, plant metadata, and weather data to forecast expected solar power output with XGBoost, detect anomalies via residual analysis, and provide explainability with SHAP values. An interactive Streamlit dashboard allows users to visualize results and insights intuitively.
 
-**Key highlights:**
+---
 
-* **Robust Data Processing:** Cleans, merges, and engineers features from solar inverter and plant datasets combined with weather data.
-* **Forecasting Model:** Implements an XGBoost model to forecast solar production and consumption.
-* **Anomaly Detection:** Identifies deviations in production patterns indicating potential issues.
-* **Explainability:** Uses SHAP (SHapley Additive exPlanations) to interpret model predictions and pinpoint feature contributions driving anomalies.
-* **Interactive Dashboard:** (If applicable, mention Streamlit or any UI) Allows stakeholders to visualize anomalies and explanations intuitively.
-* **End-to-end Pipeline:** A single script (`pipeline.py`) automates the entire workflow from raw data to actionable insights.
+## Key Features
+
+* **Data Preprocessing:** Cleans, merges, and engineers features from inverter and weather datasets.
+* **Weather Data Integration:** Automates fetching and incorporating weather data relevant to solar plant location.
+* **Power Output Forecasting:** Utilizes XGBoost regression to predict solar power generation.
+* **Anomaly Detection:** Identifies deviations from forecasted values signaling possible faults or irregularities.
+* **Explainability:** Employs SHAP to interpret feature impacts on model predictions.
+* **Interactive Dashboard:** Visualizes forecasts, anomalies, and feature importance dynamically for user exploration.
 
 ---
 
 ## Project Structure
 
 ```
-solar-production-anomaly/
-├── backend/                   # Core processing and modeling scripts
-│   ├── data_preprocessing.py  # Data cleaning and feature engineering
-│   ├── fetch_weather.py       # Weather data retrieval and integration
-│   ├── xgboost_forecast.py   # Training and forecasting using XGBoost
-│   ├── anomaly_detection.py  # Detect anomalies based on forecasting residuals
-│   ├── shap_explain.py       # Generate SHAP explanations for anomaly cases
-│   ├── pipeline.py           # Orchestrates the full pipeline execution
-│   └── __pycache__/          # Python cache files
-├── input/                    # Raw input data files (e.g., inverter.csv, plant.csv)
-├── models/                   # Trained model files (e.g., xgb_model.pkl)
-├── output/                   # Processed data, anomaly results, SHAP outputs
-├── app.py                    # (Optional) Dashboard application entrypoint
-├── requirements.txt          # Required Python packages
-├── README.md                 # This documentation file
-└── .DS_Store                 # MacOS system files (can be ignored)
+solar-anomaly-detection/
+├── app.py                        # Streamlit dashboard main app
+├── backend/                      # Core scripts and pipeline modules
+│   ├── anomaly_detection.py      # Detect anomalies in solar output
+│   ├── data_preprocessing.py     # Data cleaning and feature engineering
+│   ├── fetch_weather.py          # Weather data fetching utilities
+│   ├── pipeline.py               # Orchestrates the entire processing pipeline
+│   ├── shap_explain.py           # SHAP explainability code
+│   └── xgboost_forecast.py       # XGBoost training and prediction code
+├── input/                       # Raw input data files (inverter, weather)
+├── models/                      # Saved model artifacts
+├── output/                      # Generated output data and visualizations
+├── requirements.txt             # Python dependencies
+└── README.md                    # Project documentation
 ```
 
 ---
 
-## ⚙️ Installation & Setup
+## Getting Started
 
-1. **Clone the repository:**
+### Prerequisites
+
+* Python 3.7 or higher
+* Recommended: Use a virtual environment (venv, conda, etc.)
+
+### Installation
+
+1. Clone the repository:
 
    ```bash
-   git clone https://github.com/yourusername/solar-production-anomaly.git
-   cd solar-production-anomaly
+   git clone https://github.com/gayathrijayaraj30/solar-anomaly-detection.git
+   cd solar-anomaly-detection
    ```
 
-2. **Create a virtual environment (recommended):**
-
-   ```bash
-   python -m venv venv
-   source venv/bin/activate  # macOS/Linux
-   venv\Scripts\activate     # Windows
-   ```
-
-3. **Install dependencies:**
+2. Install required packages:
 
    ```bash
    pip install -r requirements.txt
    ```
 
-4. **Prepare your input data:**
-
-   Place your `inverter.csv` and `plant.csv` inside the `input/` folder.
+3. (Optional) Ensure any necessary API keys or config files are set if your pipeline uses external APIs for weather data.
 
 ---
 
-## ▶️ Running the Pipeline
+## Usage
 
-To run the entire anomaly detection and explanation pipeline end-to-end, simply execute:
+### Running the Full Pipeline
+
+The core processing pipeline can be executed via:
 
 ```bash
 python backend/pipeline.py
 ```
 
-This script will:
+This runs data preprocessing, weather fetching, forecasting, anomaly detection, and explainability steps end-to-end.
 
-* Preprocess raw input data
-* Fetch and integrate weather data
-* Train or load the XGBoost forecasting model
-* Detect anomalies based on forecasting residuals
-* Generate SHAP values to explain anomalies
-* Save outputs to the `output/` directory
+### Launching the Dashboard
 
----
+To start the interactive Streamlit dashboard, run:
 
-## Module Details
+```bash
+streamlit run app.py
+```
 
-* **data\_preprocessing.py**: Cleans and merges datasets, creates lag and rolling statistical features to improve model accuracy.
+The dashboard enables you to:
 
-* **fetch\_weather.py**: Downloads and processes weather data to enrich the feature set.
-
-* **xgboost\_forecast.py**: Contains code for training and using an XGBoost regression model to predict solar production.
-
-* **anomaly\_detection.py**: Detects anomalies by comparing actual production with model forecasts using residual thresholds.
-
-* **shap\_explain.py**: Uses SHAP to interpret the anomaly detection model, providing insight into which features contribute most to anomalies.
-
-* **pipeline.py**: Integrates all steps into one seamless workflow.
+* Visualize solar power forecasts vs actuals
+* Explore detected anomalies
+* Investigate feature importance with SHAP plots
 
 ---
 
-## Outputs
+## Scripts Overview
 
-* `output/merged_featured_data.csv`: Preprocessed dataset with engineered features.
-
-* `output/anomaly_results.csv`: Records of detected anomalies with timestamps.
-
-* `output/anomaly_results_with_shap.csv`: Anomalies enriched with SHAP values.
-
-* `output/shap_anomaly_values.npy` & `output/shap_values_per_anomaly.csv`: Raw and tabular SHAP values for further analysis.
-
----
-
-## Key Technologies & Libraries
-
-* **Python 3.x**
-* **XGBoost** – High-performance gradient boosting for regression
-* **SHAP** – Model explainability using Shapley values
-* **Pandas & NumPy** – Data manipulation and numerical computations
-* **Matplotlib** – Visualization of SHAP values
-* **Joblib** – Model serialization and loading
-
+| Script                  | Description                                         |
+| ----------------------- | --------------------------------------------------- |
+| `data_preprocessing.py` | Data cleaning, merging, and feature engineering     |
+| `fetch_weather.py`      | Downloads weather data for the plant location       |
+| `xgboost_forecast.py`   | Trains and predicts solar power output with XGBoost |
+| `anomaly_detection.py`  | Detects anomalies using residual errors             |
+| `shap_explain.py`       | Generates SHAP values for model interpretation      |
+| `pipeline.py`           | Runs the entire workflow in sequence                |
+| `app.py`                | Streamlit dashboard frontend                        |
 
 ---
 
-Future enhancements planned:
 
-* Integration of LSTM-based models for sequence forecasting
-* Automated alerts for detected anomalies
-* Expanded weather data features and sources
+## Live Demo
+
+Try out the interactive solar anomaly detection dashboard live at:
+
+🔗 [https://solar-anomaly-detection.streamlit.app/](https://solar-anomaly-detection.streamlit.app/)
+
+Explore solar power forecasts, anomaly detection results, and SHAP explainability visuals directly in your browser—no setup required!
+
+---
+
+## Contributing
+
+Contributions are welcome! Please fork the repo, create feature branches, and submit pull requests with clear descriptions.
+
 
