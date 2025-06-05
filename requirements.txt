@@ -2,11 +2,6 @@ numpy
 pandas
 scikit-learn
 xgboost
-tensorflow
-prophet
 streamlit
-flask
-requests
 matplotlib
 seaborn
-apscheduler
