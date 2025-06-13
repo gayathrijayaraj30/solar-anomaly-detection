@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from xgboost import XGBRegressor
-from sklearn.metrics import mean_squared_error
+from sklearn.metrics import mean_squared_error, r2_score
 from sklearn.model_selection import train_test_split
 import joblib
 import os
@@ -51,7 +51,10 @@ def train_xgb_model(X_train, y_train, X_val, y_val):
 def evaluate_model(model, X_test, y_test, test_dates, plot=True):
     predictions = model.predict(X_test)
     rmse = np.sqrt(mean_squared_error(y_test, predictions))
+    r2 = r2_score(y_test, predictions)
+
     print(f"Test RMSE: {rmse:.2f} kWh")
+    print(f"R² Score: {r2:.3f}")
 
     if plot:
         plt.figure(figsize=(12, 6))
@@ -64,7 +67,19 @@ def evaluate_model(model, X_test, y_test, test_dates, plot=True):
         plt.tight_layout()
         plt.show()
 
-    return predictions, rmse
+        residuals = y_test - predictions
+        plt.figure(figsize=(12, 4))
+        plt.plot(test_dates, residuals, marker='o', linestyle='-')
+        plt.axhline(0, color='red', linestyle='--')
+        plt.title("Residuals (Actual - Predicted)")
+        plt.xlabel("Date")
+        plt.ylabel("Error (kWh)")
+        plt.tight_layout()
+        plt.grid(True)
+        plt.show()
+
+    return predictions, rmse, r2
+
 
 def run_training_pipeline(data_path, model_path, plot=True):
     df = load_data(data_path)
@@ -82,11 +97,11 @@ def run_training_pipeline(data_path, model_path, plot=True):
     joblib.dump(model, model_path)
     print(f"Model saved to {model_path}")
 
-    predictions, rmse = evaluate_model(model, X_test, y_test, test_dates, plot=plot)
-    return model, predictions, rmse
+    predictions, rmse, r2 = evaluate_model(model, X_test, y_test, test_dates, plot=plot)
+    return model, predictions, rmse, r2
 
 if __name__ == "__main__":
-    run_training_pipeline(
+    model, predictions, rmse, r2 = run_training_pipeline(
         data_path='output/merged_featured_data.csv',
         model_path='models/xgb_model.pkl'
     )
