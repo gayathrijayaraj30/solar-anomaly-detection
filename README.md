@@ -40,6 +40,32 @@ solar-anomaly-detection/
 
 ---
 
+## Dataset Information
+
+The dataset used in this project comes from a **local solar inverter system** located in **Thrissur, Kerala, India**.
+
+- **Location**: Thrissur, Kerala  
+- **Coordinates**: Latitude `10.52385`, Longitude `76.21313`
+- **Source**: Privately owned solar inverter (not publicly released)
+- **Contents**:
+  - Daily solar energy **production** and **consumption** (kWh)
+  - **Grid feed-in**, **electricity purchasing**, and **anticipated yield (INR)**
+  - Weather data: temperature, precipitation, rain flags, etc.
+- **Time Period**: *(e.g., Jan 2022 – Mar 2023)*  
+- **Note**: Original data not shared due to privacy, but structure-matching samples are used.
+
+## Model Performance
+
+The production forecast model is based on an **XGBoost Regressor** trained on feature-engineered historical data.
+
+- **Test RMSE**: `0.11 kWh`
+- **R² Score**: `0.999`
+
+These metrics are calculated on a hold-out test set and indicate a **very high accuracy**, with predictions closely matching actual production values.
+
+Residual plots and SHAP value explanations are included to further analyze prediction reliability and feature impact.
+
+
 ## Getting Started
 
 ### Prerequisites
