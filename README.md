@@ -42,17 +42,28 @@ solar-anomaly-detection/
 
 ## Dataset Information
 
-The dataset used in this project comes from a **local solar inverter system** located in **Thrissur, Kerala, India**.
+This project uses two primary datasets sourced from a privately owned residential solar power system located in **Thrissur, Kerala, India** (Latitude: `10.52385`, Longitude: `76.21313`). The data was collected directly from the local inverter and corresponding solar plant dashboard.
 
-- **Location**: Thrissur, Kerala  
-- **Coordinates**: Latitude `10.52385`, Longitude `76.21313`
-- **Source**: Privately owned solar inverter (not publicly released)
-- **Contents**:
-  - Daily solar energy **production** and **consumption** (kWh)
-  - **Grid feed-in**, **electricity purchasing**, and **anticipated yield (INR)**
-  - Weather data: temperature, precipitation, rain flags, etc.
-- **Time Period**: *(e.g., Jan 2022 – Mar 2023)*  
-- **Note**: Original data not shared due to privacy, but structure-matching samples are used.
+### inverter.csv
+
+This dataset captures daily telemetry from the solar inverter. It includes:
+
+* Total daily energy **production** and **consumption** (in kWh)
+* **Grid feed-in** (energy exported to the grid)
+* **Electricity purchasing** (energy drawn from the grid)
+* Device metadata such as serial numbers and device type
+* A timestamp representing the day the readings were recorded
+
+### plant.csv
+
+This dataset contains daily performance summaries at the plant level. It includes:
+
+* **Anticipated financial yield** in INR (based on expected production)
+* **Self-consumption ratio** (percentage of generated energy used on-site)
+* Aggregated values for production, consumption, feed-in, and grid usage
+* Timestamps aligned with the inverter data
+
+These two datasets are merged on the date field and undergo preprocessing to handle missing values, standardize formats, and generate additional time-series features such as lag variables and rolling statistics. The resulting combined dataset serves as the foundation for model training and anomaly detection.
 
 ## Model Performance
 
